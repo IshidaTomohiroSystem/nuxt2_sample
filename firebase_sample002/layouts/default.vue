@@ -26,7 +26,7 @@
               </NuxtLink>
               <NuxtLink to="/todoitems" style="text-decoration: none;">
                 <el-menu-item>
-                  Items
+                  TodoList
                 </el-menu-item>
               </NuxtLink>
             </el-menu-item-group>
