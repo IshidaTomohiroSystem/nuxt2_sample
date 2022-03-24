@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated () {
+      return request.auth != null;
+    }
+
+    function isUserAuthenticated (firebaseId) {
+      return isAuthenticated() && firebaseId == request.auth.uid;
+    }
+
+    match /users/{firebaseId} {
+      allow write:if isUserAuthenticated(firebaseId)
+      && (('name') in request.resource.data) || (request.resource.data.name is string)
+      && (('firebaseId') in request.resource.data);
+      //&& request.resource.data.name.size()<=5;
+      allow read:if isUserAuthenticated(firebaseId);
+    }
+
+    match /todos-item/{todo} {
+      allow read:if true;
+      allow write:if true;
+    }
+
+    // match /{document=**} {
+    //   allow read, write: if true;
+    // }
+  }
+}
