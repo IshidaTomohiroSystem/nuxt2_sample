@@ -9,8 +9,9 @@
       </el-form-item>
       <el-form-item label="belonging">
         <el-select v-model="formInline.region" placeholder="Activity zone">
-          <el-option label="japan" value="japan" />
-          <el-option label="america" value="america" />
+          <span v-for="(item, index) in belongingList" :key="index">
+            <el-option :label="item.belonging" :value="item.belonging" />
+          </span>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -28,7 +29,7 @@
 </template>
 
 <script>
-import { getFirestore, doc, updateDoc, Timestamp } from 'firebase/firestore'
+import { getFirestore, query, collection, onSnapshot, doc, updateDoc, Timestamp } from 'firebase/firestore'
 export default {
   middleware: ['testMiddleware'],
   data () {
@@ -38,8 +39,43 @@ export default {
       },
       formInline: {
         region: ''
-      }
+      },
+      belongingList: []
     }
+  },
+  created () {
+    // items () {
+    const result = []
+    try {
+      const db = getFirestore()
+      const belongingCol = query(collection(db, 'belonging-list'))
+      onSnapshot(belongingCol, (QuerySnapshot) => {
+        QuerySnapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            const item = {
+              belonging: change.doc.data().belonging
+            }
+            result.push(item)
+          }
+          if (change.type === 'modified') {
+            result.forEach(function (item, index) {
+              if (item.belonging === change.doc.data().belonging) {
+                item.belonging = change.doc.data().belonging
+              }
+            })
+          }
+          if (change.type === 'removed') {
+            result.forEach(function (item, index) {
+              if (item.belonging === change.doc.data().belonging) {
+                result.splice(index, 1)
+              }
+            })
+          }
+        })
+      })
+    } catch (e) {
+    }
+    this.belongingList = result
   },
   methods: {
     async onSubmit () {
