@@ -38,6 +38,7 @@ export default {
       firestore: {
         enablePersistence: true
       },
+      storage: true
     },
   },
 
@@ -50,6 +51,10 @@ export default {
   plugins: [
     "@/plugins/element-ui",
     "@/plugins/asyncComputed",
+    {
+      src: '@/plugins/vueCoreVideoPlayer',
+      mode: 'client'
+    }
   ],
   ssr: false,
   // Auto import components: https://go.nuxtjs.dev/config-components

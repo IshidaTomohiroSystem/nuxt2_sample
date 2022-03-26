@@ -35,6 +35,16 @@
             LoginFirebaseUI
           </el-menu-item>
         </NuxtLink>
+        <NuxtLink to="/video" style="text-decoration: none;">
+          <el-menu-item>
+            Video
+          </el-menu-item>
+        </NuxtLink>
+        <NuxtLink to="/storageTest" style="text-decoration: none;">
+          <el-menu-item>
+            StorageTest
+          </el-menu-item>
+        </NuxtLink>
       </el-menu-item-group>
     </el-menu>
   </el-aside>
